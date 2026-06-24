@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { C } from '../theme';
 import { useApp } from '../AppContext';
+import { PRODUCT_IMAGES } from '../productImages';
 
 const CATEGORIES = ['ทั้งหมด', 'โน้ตบุ๊ก', 'เดสก์ท็อป', 'จอภาพ'];
 
@@ -52,7 +53,11 @@ export default function ProductsScreen() {
               activeOpacity={0.82}
             >
               <View style={s.productVisual}>
-                <Text style={s.productIcon}>{product.icon}</Text>
+                <Image
+                  source={PRODUCT_IMAGES[product.image_key] || PRODUCT_IMAGES.laptop}
+                  style={s.productImage}
+                  resizeMode="cover"
+                />
                 {!!product.badge && <Text style={s.badge}>{product.badge}</Text>}
               </View>
               <Text numberOfLines={2} style={s.productName}>{product.name}</Text>
@@ -87,8 +92,8 @@ const s = StyleSheet.create({
   summarySub: { fontSize: 12, color: C.muted },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingHorizontal: 20 },
   productCard: { width: '48%', flexGrow: 1, backgroundColor: C.white, borderRadius: 18, borderWidth: 1, borderColor: C.border, padding: 12, minWidth: 150 },
-  productVisual: { height: 106, backgroundColor: C.surface, borderRadius: 13, alignItems: 'center', justifyContent: 'center', marginBottom: 12, overflow: 'hidden' },
-  productIcon: { color: C.dark, fontSize: 52, fontWeight: '700' },
+  productVisual: { height: 106, backgroundColor: C.surface, borderRadius: 13, marginBottom: 12, overflow: 'hidden' },
+  productImage: { width: '100%', height: '100%' },
   badge: { position: 'absolute', top: 8, left: 8, paddingHorizontal: 7, paddingVertical: 3, borderRadius: 99, backgroundColor: C.lime, color: C.dark, fontSize: 10, fontWeight: '700' },
   productName: { fontSize: 14, lineHeight: 18, color: C.dark, fontWeight: '700', minHeight: 36 },
   productChip: { fontSize: 12, color: C.green, fontWeight: '600', marginTop: 5 },

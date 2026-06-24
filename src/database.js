@@ -29,6 +29,7 @@ export async function initDb() {
       specs TEXT NOT NULL,
       price INTEGER NOT NULL,
       icon TEXT NOT NULL,
+      image_key TEXT NOT NULL DEFAULT 'laptop',
       badge TEXT NOT NULL DEFAULT ''
     );
 
@@ -56,6 +57,11 @@ export async function initDb() {
       value TEXT NOT NULL DEFAULT '1'
     );
   `);
+
+  const productColumns = await db.getAllAsync('PRAGMA table_info(products)');
+  if (!productColumns.some((column) => column.name === 'image_key')) {
+    await db.execAsync("ALTER TABLE products ADD COLUMN image_key TEXT NOT NULL DEFAULT 'laptop'");
+  }
 
   // Seed bills
   const billCount = await db.getFirstAsync('SELECT COUNT(*) as n FROM bills');
@@ -86,6 +92,14 @@ export async function initDb() {
       ('mac-studio-m3-ultra','Mac Studio','เดสก์ท็อป','Apple M3 Ultra','96GB · 1TB SSD',149900,'▣','แรงสุด'),
       ('studio-display','Studio Display','จอภาพ','Retina 5K','27-inch · Standard glass',52900,'▤','ใหม่'),
       ('studio-display-xdr','Studio Display XDR','จอภาพ','Retina 5K XDR','27-inch · Nano-texture glass',109900,'▤','โปร');
+  `);
+
+  await db.execAsync(`
+    UPDATE products SET image_key = CASE
+      WHEN category = 'โน้ตบุ๊ก' THEN 'laptop'
+      WHEN category = 'จอภาพ' THEN 'display'
+      ELSE 'desktop'
+    END;
   `);
 
   // Seed user (one row only)

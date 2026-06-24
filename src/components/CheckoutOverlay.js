@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  View, Text, Modal, TouchableOpacity, ScrollView, Animated, StyleSheet,
+  View, Text, Image, Modal, TouchableOpacity, ScrollView, Animated, StyleSheet,
 } from 'react-native';
 import { C } from '../theme';
 import { useApp } from '../AppContext';
+import { PRODUCT_IMAGES } from '../productImages';
 
 const money = (amount) => `฿${Number(amount).toLocaleString('en-US')}`;
 
@@ -25,7 +26,9 @@ function PlanStep({ product, plans, planIndex, onSelect }) {
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20, paddingBottom: 16 }}>
       <View style={s.productCard}>
-        <View style={s.productIcon}><Text style={{ fontSize: 32, color: C.dark }}>{product.icon}</Text></View>
+        <View style={s.productIcon}>
+          <Image source={PRODUCT_IMAGES[product.image_key] || PRODUCT_IMAGES.laptop} style={s.checkoutProductImage} resizeMode="cover" />
+        </View>
         <View style={{ flex: 1 }}>
           <Text style={s.productName}>{product.name}</Text>
           <Text style={s.productSub}>{product.chip} · {product.specs}</Text>
@@ -237,9 +240,9 @@ const s = StyleSheet.create({
     borderRadius: 18, padding: 16, flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 22,
   },
   productIcon: {
-    width: 56, height: 56, borderRadius: 14, backgroundColor: C.surface,
-    alignItems: 'center', justifyContent: 'center',
+    width: 56, height: 56, borderRadius: 14, backgroundColor: C.surface, overflow: 'hidden',
   },
+  checkoutProductImage: { width: '100%', height: '100%' },
   productName: { fontSize: 15, fontWeight: '700', color: C.dark },
   productSub: { fontSize: 12, color: C.muted, marginTop: 2 },
   productPrice: { fontSize: 17, fontWeight: '700', color: C.dark },
